@@ -44,12 +44,8 @@
 						<?php endforeach; ?>
 					</select>
 		</p>
-		<!-- <p>
-			<label for="discont">Total Discount<label>
-					<input type="number" name="discont" id="discont" v-model="discont" min='0'>%
-		</p> -->
 		<p>
-			<label for="totbay">Total Bayar<label>
+			<label for="totbay">Total Bayar Diskon<label>
 					<input type="number" name="totbay" id="totbay" v-model="totbay" min='0'>
 		</p>
 		<p>
@@ -70,25 +66,23 @@
 		<tr>
 			<th>Name</th>
 			<th>Unit</th>
-			<th>Stock</th>
-			<th>Price</th>
-			<th>Qty</th>
 			<th>Action</th>
 		</tr>
-        <?php foreach ($getDataItem as $getDataItem):?>
 		<tr>
-			<td><?= (empty($getDataItem['name_item']))? '-': $getDataItem['name_item'] ?></td>
-			<td><?= (empty($getDataItem['unit']))? '-': $getDataItem['unit'] ?></td>
-			<td><?= (empty($getDataItem['qty']))? '-': $getDataItem['qty'] ?></td>
-			<td><?= (empty($getDataItem['price']))? '-': $getDataItem['price'] ?></td>
-			<td><input type="number" name="qty" id="qty" v-model="qty" v-on:input="PostsItemStagging($event, <?=$getDataItem['id_item']?>)" min='0'></td>
 			<td>
-                <!-- <a class="button" href="<?= base_url().'Transaction/delete/'.$getDataItem['id_item'] ?>" >Add</a> -->
-				<!-- <button v-on:input="PostStagging($event, <?=$getDataItem['id_item']?>)">Add</button> -->
-				<input type="submit" value="Submit" id="contentsforstagging" class="contentsforstagging" v-on:click="PostStagging($event, <?=$getDataItem['id_item']?>)">
+				<select name="name_item" id="name_item" v-model="id_item" >
+					<option value="" selected>--SELECT--</option>
+					<?php foreach ($getDataItem as $a): ?>
+					<option value="<?= $a['id_item'] ?>">
+						<?= $a['name_item'] ?>&nbsp;:&nbsp;<?= $a['name_item'] ?></option>
+					<?php endforeach; ?>
+				</select>
+			</td>
+			<td><input type="number" name="qty" id="qty" v-model="qty" v-on:input="PostsItemStagging($event)" min='0'></td>
+			<td>
+				<input type="submit" value="Submit" id="contentsforstagging" class="contentsforstagging" v-on:click="PostStagging($event)">
             </td>
 		</tr>
-        <?php endforeach; ?>
 	</table>
 
 			<div id="contents-stagging">
@@ -106,6 +100,7 @@
 			<th>toatal_diskon</th>
 			<th>toatal_harga</th>
 			<th>toatal_bayar</th>
+			<th>action</th>
 		</tr>
         <?php foreach ($getDataTransaction as $getDataItem):?>
 		<tr>
@@ -116,7 +111,7 @@
 			<td><?= (empty($getDataItem['total_harga']))? '-': $getDataItem['total_harga'] ?></td>
 			<td><?= (empty($getDataItem['total_bayar']))? '-': $getDataItem['total_bayar'] ?></td>
 			<td>
-                <a class="button" href="<?= base_url().'Customer/delete/'.$getDataItem['id_transaction'] ?>" >View Detail</a>
+                <a class="button" href="<?= base_url().'Transaction/index_detail/'.$getDataItem['id_transaction'] ?>" >View Detail</a>
             </td>
 		</tr>
         <?php endforeach; ?>
@@ -135,26 +130,20 @@
 					dataA: $('#codeTransaksi').val(),
 					dataB: $('#conatct').val(),
 					dataC: $('#totbay').val(),
-					// dom_id_trans: dom_id_trans
 				},
 				success	: function(response) {
-					// $('#contents-stagging').html(response);
-					// $('#tothar').val(response);
-					// loadStagging();
                     alert('Success, please refresh page!')
 				}
 			});
 		});
 		const urlCheckSTaggingTable = location.href+'/index_stagging';
+		
 		$("#contentsforstagging").click(function() {
 			$.ajax({
 				url		: urlCheckSTaggingTable,
 				type	: 'POST',
 				cache	: false,
 				data	: {
-					// dom_id_item: $('#codeTransaksi').val(),
-					// dom_id_item: $('#conatct').val(),
-					// dom_id_trans: dom_id_trans
 				},
 				success	: function(response) {
 					// $('#contents-stagging').html(response);
@@ -163,15 +152,12 @@
 			});
 		});
 		const urltotalHarga = location.href+'/totalHarga';
-		$("#contentsforstagging").click(function() {
+		$(".contentsforstagging").click(function() {
 			$.ajax({
 				url		: urltotalHarga,
 				type	: 'POST',
 				cache	: false,
 				data	: {
-					// dom_id_item: $('#codeTransaksi').val(),
-					// dom_id_item: $('#conatct').val(),
-					// dom_id_trans: dom_id_trans
 				},
 				success	: function(response) {
 					$('#tothar').val(response);

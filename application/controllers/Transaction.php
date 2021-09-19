@@ -45,6 +45,19 @@ class Transaction extends CI_Controller {
         );
 		$this->load->view($this->className.'Stagging_View', $data);
 	}
+    
+    public function index_detail($id_transaction)
+    {
+        $data = array (
+            'pageCss'   => base_url().'assets/css/'.$this->className.'.css',
+            'detailTrans'   => $this->db->select('b.name_item, a.qty, a.id_transaction')
+                                    ->join('items b', 'a.id_item = b.id_item')
+                                    ->where('a.id_transaction', $id_transaction)
+                                    ->get('sales_detail a')->result_array(),
+        );
+        $this->load->view($this->className.'Detail_View', $data);
+
+    }
 
     public function checkQty()
     {
@@ -128,16 +141,33 @@ class Transaction extends CI_Controller {
             'total_bayar' => $this->input->post('dataC'),
         );
         $this->db->insert('sales', $data);
-        $qty = $this->db->get('sales_stagging')->row()->qty;
-        $id_item = $this->db->get('sales_stagging')->row()->id_item;
-        $data_sales_detail = array (
-            'id_transaction' => $this->db->order_by('date DESC')->get('sales')->row()->id_transaction,
-            'qty' => $qty,
-            'id_item' =>  $id_item
-        );
-        $this->db->insert('sales_detail', $data_sales_detail);
+        // $qty = $this->db->get('sales_stagging')->row()->qty;
+        $id_item = $this->db->get('sales_stagging')->result();
+        $totalRows = $this->db->get('sales_stagging')->num_rows();
+        
+        // $data=array();
+        // for ($x = 1; $x <= $totalRows; $x++) {
+        //     $data_sales_detail = array (
+        //         'id_transaction' => $this->db->order_by('date DESC')->get('sales')->row()->id_transaction,
+        //         'qty' => $this->db->select('qty')->get_where('sales_stagging', ['id_sales_stagging'=> $x ])->row('qty'),
+        //         'id_item' => $this->db->select('id_item')->get_where('sales_stagging', ['id_sales_stagging'=> $x ])->row(),
+        //         // 'id_item' =>  $id_item[$x]
+        //     );
+        //     array_push($data, $data_sales_detail);
+        // }
+        $id_trans = $this->db->order_by('date DESC')->get('sales')->row()->id_transaction;
+        // $id_trans = $id_trans.'as id_transaction';
+        $select = $this->db->select('b.id_transaction , a.qty , a.id_item')->join('sales b','1=1','right')->where('b.id_transaction', $id_trans)->get('sales_stagging a');
+        
+        if($select->num_rows())
+        {
+            // $insert = $this->db->insert('sales_detail', $select->result_array());
+            $this->db->insert_batch('sales_detail', $select->result_array());
+            $this->db->truncate('sales_stagging');
+        }
 
-        $this->db->delete('sales_stagging', array('id_customer !=' => NULL));
+        // $this->db->delete('sales_stagging', array('id_customer !=' => NULL));
+
     }
 
     public function delete($id) 
