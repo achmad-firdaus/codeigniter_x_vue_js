@@ -16,8 +16,8 @@
 		<li><a class="" href="<?= base_url().'Transaction'; ?>">{{ menu3 }}</a></li>
 	</ul>
 
-	<!-- <form id="formItem" @submit="checkForm" action="http://localhost/CODEIGNITER/RIMBA/Item/insert" method="post"> -->
-	<form id="formItem" @submit="checkForm" method="post" enctype="multipart/form-data">
+	<form id="formItem" action="<?= base_url() ?>Customer/insert" method="post" enctype="multipart/form-data">
+	<!-- <form id="formItem" @submit="checkForm" method="post" enctype="multipart/form-data"> -->
 		<p v-if="errors.length">
 			<b>Please correct the following error(s):</b>
 			<ul>
@@ -26,34 +26,36 @@
 		</p>
 		<p>
 			<label for="nameCustomer">Name Customer<label>
-					<input type="text" name="nameCustomer" id="nameCustomer" v-model="nameCustomer">
+					<input type="text" name="inputA" id="nameCustomer" v-model="nameCustomer">
 		</p>
 		<p>
 			<label for="conatct">Conatct<label>
-					<input type="text" name="conatct" id="conatct" v-model="conatct">
+					<input type="text" name="inputB" id="conatct" v-model="conatct">
 		</p>
 		<p>
 			<label for="email">Email<label>
-					<input type="email" name="email" id="email" v-model="email">
+					<input type="email" name="inputC" id="email" v-model="email">
 		</p>
 		<p>
 			<label for="address">Address<label>
-					<input type="text" name="address" id="address" v-model="address">
+					<input type="text" name="inputD" id="address" v-model="address">
 		</p>
 		<p>
 			<label for="discont">Discont<label>
-					<input type="number" name="discont" id="discont" v-model="discont">%
+					<input type="number" name="inputE" id="discont" v-model="discont">%
 		</p>
 		<p>
 			<label for="type">Type DIscont<label>
-					<select name="type" id="type" v-model="type">
+					<select name="inputF" id="type" v-model="type">
 						<option>presentase</option>
 						<option>fix diskon</option>
 					</select>
 		</p>
 		<p>
 			<label for="img">Ktp<label>
-					<input type="file" accept="image/*" name="img" id="img"  @change="previewFiles" multiple>
+					<!-- <input type="file" accept="image/*" name="img" id="img"  @change="previewFiles" multiple> -->
+					<input type="file" class="form-control" name="photoUser" id="inputGroupFile03"
+									aria-describedby="inputGroupFileAddon03" aria-label="Upload" accept="image/*">
 		</p>
 		<p>
 			<!-- <button v-on:click="getPosts()" type="button">Login</button> -->
@@ -80,7 +82,8 @@
 			<td><?= (empty($getDataItem['address']))? '-': $getDataItem['address'] ?></td>
 			<td><?= (empty($getDataItem['diskon']))? '-': $getDataItem['diskon'] ?></td>
 			<td><?= (empty($getDataItem['type_diskon']))? '-': $getDataItem['type_diskon'] ?></td>
-			<td><?= (empty($getDataItem['img_ktp']))? '-': $getDataItem['img_ktp'] ?></td>
+			<td> <img style="width: 50px;" src="<?= (empty($getDataItem['img_ktp']))? '-': base_url().'assets/img/upload/'.$getDataItem['img_ktp'] ?>" alt="">
+				</td>
 			<td>
                 <a class="button" href="<?= base_url().'Customer/delete/'.$getDataItem['id_customer'] ?>" >Delete</a>
             </td>

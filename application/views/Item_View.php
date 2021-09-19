@@ -16,8 +16,8 @@
 		<li><a class="" href="<?= base_url().'Transaction'; ?>">{{ menu3 }}</a></li>
 	</ul>
 
-	<!-- <form id="formItem" @submit="checkForm" action="http://localhost/CODEIGNITER/RIMBA/Item/insert" method="post"> -->
-	<form id="formItem" @submit="checkForm" method="post" enctype="multipart/form-data">
+	<form id="formItem" action="<?= base_url()?>Item/insert" method="post" enctype="multipart/form-data">
+	<!-- <form id="formItem" @submit="checkForm" method="post" enctype="multipart/form-data"> -->
 		<p v-if="errors.length">
 			<b>Please correct the following error(s):</b>
 			<ul>
@@ -26,26 +26,28 @@
 		</p>
 		<p>
 			<label for="nameItem">Name Item<label>
-					<input type="text" name="nameItem" id="nameItem" v-model="nameItem">
+					<input type="text" name="inputA" id="nameItem" v-model="nameItem">
 		</p>
 		<p>
 			<label for="unit">Unit<label>
-					<select name="unit" id="unit" v-model="unit">
+					<select name="inputB" id="unit" v-model="unit">
 						<option>KG</option>
 						<option>PCS</option>
 					</select>
 		</p>
 		<p>
 			<label for="stock">Stock<label>
-					<input type="number" name="stock" id="stock" v-model="stock" min="0">
+					<input type="number" name="inputC" id="stock" v-model="stock" min="0">
 		</p>
 		<p>
 			<label for="price">Price<label>
-					<input type="number" name="price" id="price" v-model="price" min="0">
+					<input type="number" name="inputD" id="price" v-model="price" min="0">
 		</p>
 		<p>
 			<label for="img">Img<label>
-					<input type="file" accept="image/*" name="img" id="img"  @change="previewFiles" multiple>
+					<!-- <input type="file" accept="image/*" name="img" id="img"  @change="previewFiles" multiple> -->
+					<input type="file" class="form-control" name="photoUser" id="inputGroupFile03"
+									aria-describedby="inputGroupFileAddon03" aria-label="Upload" accept="image/*">
 		</p>
 		<p>
 			<!-- <button v-on:click="getPosts()" type="button">Login</button> -->
@@ -68,7 +70,7 @@
 			<td><?= (empty($getDataItem['unit']))? '-': $getDataItem['unit'] ?></td>
 			<td><?= (empty($getDataItem['qty']))? '-': $getDataItem['qty'] ?></td>
 			<td><?= (empty($getDataItem['price']))? '-': $getDataItem['price'] ?></td>
-			<td><?= (empty($getDataItem['img']))? '-': $getDataItem['img'] ?></td>
+			<td><img style="width: 50px;" src="<?= (empty($getDataItem['img']))? '-': base_url().'assets/img/upload/'.$getDataItem['img'] ?>" alt=""></td>
 			<td>
                 <a class="button" href="<?= base_url().'Item/delete/'.$getDataItem['id_item'] ?>" >Delete</a>
             </td>
